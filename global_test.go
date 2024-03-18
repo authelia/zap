@@ -107,9 +107,9 @@ func TestNewStdLog(t *testing.T) {
 
 func TestNewStdLogAt(t *testing.T) {
 	// include DPanicLevel here, but do not include Development in options
-	levels := []zapcore.Level{DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel}
+	levels := []zapcore.Level{TraceLevel, DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel}
 	for _, level := range levels {
-		withLogger(t, DebugLevel, []Option{AddCaller()}, func(l *Logger, logs *observer.ObservedLogs) {
+		withLogger(t, TraceLevel, []Option{AddCaller()}, func(l *Logger, logs *observer.ObservedLogs) {
 			std, err := NewStdLogAt(l, level)
 			require.NoError(t, err, "Unexpected error.")
 			std.Print("redirected")
@@ -182,9 +182,9 @@ func TestRedirectStdLogAt(t *testing.T) {
 	initialPrefix := log.Prefix()
 
 	// include DPanicLevel here, but do not include Development in options
-	levels := []zapcore.Level{DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel}
+	levels := []zapcore.Level{TraceLevel, DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel}
 	for _, level := range levels {
-		withLogger(t, DebugLevel, nil, func(l *Logger, logs *observer.ObservedLogs) {
+		withLogger(t, TraceLevel, nil, func(l *Logger, logs *observer.ObservedLogs) {
 			restore, err := RedirectStdLogAt(l, level)
 			require.NoError(t, err, "Unexpected error.")
 			defer restore()
@@ -203,9 +203,9 @@ func TestRedirectStdLogAt(t *testing.T) {
 
 func TestRedirectStdLogAtCaller(t *testing.T) {
 	// include DPanicLevel here, but do not include Development in options
-	levels := []zapcore.Level{DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel}
+	levels := []zapcore.Level{TraceLevel, DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel}
 	for _, level := range levels {
-		withLogger(t, DebugLevel, []Option{AddCaller()}, func(l *Logger, logs *observer.ObservedLogs) {
+		withLogger(t, TraceLevel, []Option{AddCaller()}, func(l *Logger, logs *observer.ObservedLogs) {
 			restore, err := RedirectStdLogAt(l, level)
 			require.NoError(t, err, "Unexpected error.")
 			defer restore()

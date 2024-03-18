@@ -305,7 +305,8 @@ func TestSugarStructuredLogging(t *testing.T) {
 	)
 
 	for _, tt := range tests {
-		withSugar(t, DebugLevel, nil, func(logger *SugaredLogger, logs *observer.ObservedLogs) {
+		withSugar(t, TraceLevel, nil, func(logger *SugaredLogger, logs *observer.ObservedLogs) {
+			logger.With(context...).Tracew(tt.msg, extra...)
 			logger.With(context...).Debugw(tt.msg, extra...)
 			logger.With(context...).Infow(tt.msg, extra...)
 			logger.With(context...).Warnw(tt.msg, extra...)
@@ -313,8 +314,8 @@ func TestSugarStructuredLogging(t *testing.T) {
 			logger.With(context...).DPanicw(tt.msg, extra...)
 			logger.With(context...).Logw(WarnLevel, tt.msg, extra...)
 
-			expected := make([]observer.LoggedEntry, 6)
-			for i, lvl := range []zapcore.Level{DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel, WarnLevel} {
+			expected := make([]observer.LoggedEntry, 7)
+			for i, lvl := range []zapcore.Level{TraceLevel, DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel, WarnLevel} {
 				expected[i] = observer.LoggedEntry{
 					Entry:   zapcore.Entry{Message: tt.expectMsg, Level: lvl},
 					Context: expectedFields,
@@ -338,7 +339,8 @@ func TestSugarConcatenatingLogging(t *testing.T) {
 	expectedFields := []Field{String("foo", "bar")}
 
 	for _, tt := range tests {
-		withSugar(t, DebugLevel, nil, func(logger *SugaredLogger, logs *observer.ObservedLogs) {
+		withSugar(t, TraceLevel, nil, func(logger *SugaredLogger, logs *observer.ObservedLogs) {
+			logger.With(context...).Trace(tt.args...)
 			logger.With(context...).Debug(tt.args...)
 			logger.With(context...).Info(tt.args...)
 			logger.With(context...).Warn(tt.args...)
@@ -346,8 +348,8 @@ func TestSugarConcatenatingLogging(t *testing.T) {
 			logger.With(context...).DPanic(tt.args...)
 			logger.With(context...).Log(InfoLevel, tt.args...)
 
-			expected := make([]observer.LoggedEntry, 6)
-			for i, lvl := range []zapcore.Level{DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel, InfoLevel} {
+			expected := make([]observer.LoggedEntry, 7)
+			for i, lvl := range []zapcore.Level{TraceLevel, DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel, InfoLevel} {
 				expected[i] = observer.LoggedEntry{
 					Entry:   zapcore.Entry{Message: tt.expect, Level: lvl},
 					Context: expectedFields,
@@ -375,7 +377,8 @@ func TestSugarTemplatedLogging(t *testing.T) {
 	expectedFields := []Field{String("foo", "bar")}
 
 	for _, tt := range tests {
-		withSugar(t, DebugLevel, nil, func(logger *SugaredLogger, logs *observer.ObservedLogs) {
+		withSugar(t, TraceLevel, nil, func(logger *SugaredLogger, logs *observer.ObservedLogs) {
+			logger.With(context...).Tracef(tt.format, tt.args...)
 			logger.With(context...).Debugf(tt.format, tt.args...)
 			logger.With(context...).Infof(tt.format, tt.args...)
 			logger.With(context...).Warnf(tt.format, tt.args...)
@@ -383,8 +386,8 @@ func TestSugarTemplatedLogging(t *testing.T) {
 			logger.With(context...).DPanicf(tt.format, tt.args...)
 			logger.With(context...).Logf(ErrorLevel, tt.format, tt.args...)
 
-			expected := make([]observer.LoggedEntry, 6)
-			for i, lvl := range []zapcore.Level{DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel, ErrorLevel} {
+			expected := make([]observer.LoggedEntry, 7)
+			for i, lvl := range []zapcore.Level{TraceLevel, DebugLevel, InfoLevel, WarnLevel, ErrorLevel, DPanicLevel, ErrorLevel} {
 				expected[i] = observer.LoggedEntry{
 					Entry:   zapcore.Entry{Message: tt.expect, Level: lvl},
 					Context: expectedFields,
